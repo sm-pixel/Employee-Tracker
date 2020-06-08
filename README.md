@@ -28,6 +28,6 @@ npm i
 ```
 
 ## Author
-[sm-pixel](github.com/sm-pixel)
-email [ms.samantha.marie.86@gmail.com](mailto:ms.samantha.marie.86@gmail.com)
+Github: [sm-pixel](github.com/sm-pixel)
+Email: [ms.samantha.marie.86@gmail.com](mailto:ms.samantha.marie.86@gmail.com)
   
