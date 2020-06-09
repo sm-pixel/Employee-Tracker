@@ -18,7 +18,20 @@ connection.connect(function(err) {
 });
 
 //Starts app
-
+function startApp() {
+    inquirer.prompt({
+        name: "",
+        type: "list",
+        message: "What would you like to do?",
+        choices: ["Add Employee", 
+        "Remove Employee", 
+        "View All Employees", 
+        "Update Employee Role",
+        "Add Role",
+        "Remove Role",
+        "EXIT"]
+    })
+}
     //Prompt user with questions
 
     //Call fuction based on answer
@@ -37,4 +50,4 @@ connection.connect(function(err) {
 
 //View roles
 
-//Remove roles
+//Update employee roles
