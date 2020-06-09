@@ -12,10 +12,10 @@ const connection = mysql.createConnection({
     database: "employee_DB"
 });
 
-connection.connect(function (err) {
+connection.connect (function (err) {
     if (err) throw err;
     startApp();
-});
+})
 
 //Starts app
 function startApp() {
@@ -35,60 +35,117 @@ function startApp() {
             "EXIT"]
     })
     //Call fuction based on answer
-        .then(function (option) {
-            if (option.choice === "Add Employee") {
+        .then(function (response) {
+            if (response.choice === "Add Employee") {
                 addEmployee();
-            } else if (option.choice === "Remove Employee") {
+            } else if (response.choice === "Remove Employee") {
                 removeEmployee();
-            } else if (option.choice === "View All Employees") {
+            } else if (response.choice === "View All Employees") {
                 viewEmployees();
-            } else if (option.choice === "Add Role") {
+            } else if (response.choice === "Add Role") {
                 addRole();
-            } else if (option.choice === "Remove Role") {
+            } else if (response.choice === "Remove Role") {
                 removeRole();
-            } else if (option.choice === "Update Employee Role") {
+            } else if (response.choice === "Update Employee Role") {
                 updateRole();
-            } else if (option.choice === "Add Department") {
+            } else if (response.choice === "Add Department") {
                 addDep();
-            } else if (option.choice === "Remove Department") {
+            } else if (response.choice === "Remove Department") {
                 removeDep();
-            } else if (option.choice === "EXIT") {
+            }else if (response.choice === "EXIT") {
                 connection.end();
             }
-        })
+        }
+    )
 }
 
-//Get array of roles
-
 //Add employee to database
-addEmployee() {
-
+function addEmployee() {
+    inquirer.prompt([
+        {
+            name: "firstName",
+            type: "input",
+            message: "What is the employee's first name?"
+        },
+        {
+            name: "lastName",
+            type: "input",
+            message: "What is the employee's last name?"
+        },
+        {
+            name: "role",
+            type: "input",
+            message: "What is the employee's role?"
+        }
+    ])
+    .then(function(response) {
+        //Add to database
+        connection.query("INSERT INTO employee SET?", {
+            //role_id: ,
+            first_name: response.firstName,
+            last_name: response.lastName,
+            role: response.role            
+        }, function(err) {
+            if (err) throw err;
+        })
+        startApp();
+    })
 };
+
 //Remove employee from database
-removeEmployee() {
+
+// //View database
+// viewEmployees() {
     
-};
-//View database
-viewEmployees() {
-    
-};
+// };
+
 //Add role
-addRole() {
-    
+function addRole() {
+    connection.query("SELECT * FROM department", function (err, result) {
+        if(err) throw err;
+        inquirer.prompt([
+            {
+                name: "roleTitle",
+                type: "input",
+                message: "What is the employee's title?"
+            },
+            {
+                name: "salary",
+                type: "input",
+                message: "What is the employee's salary?"
+            },
+            {
+                name: "department",
+                type: "input",
+                message: "What department is the employee in?"
+            }
+        ])
+        .then(function(response) {
+            connection.query("INSERT INTO role SET?", {
+                title: response.title,
+                salary: response.salary,
+                department: response.department
+            }, function(err) {
+                if(err) throw err;
+            })
+            startApp();
+        })
+    })
 };
-//Remove role
-removeRole() {
-    
-};
-//Update employee roles
-updateRole() {
-    
-};
-//Add department
-addDep() {
 
-};
-//Remove department
-removeDep() {
+// //Remove role
+// removeRole() {
+    
+// };
+// //Update employee roles
+// updateRole() {
+    
+// };
+// //Add department
+// addDep() {
 
-};
+// };
+// //Remove department
+// removeDep() {
+
+// };
