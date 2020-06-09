@@ -12,7 +12,7 @@ const connection = mysql.createConnection({
     database: "employee_DB"
 });
 
-connection.connect (function (err) {
+connection.connect(function (err) {
     if (err) throw err;
     startApp();
 })
@@ -34,7 +34,7 @@ function startApp() {
             "Remove Department",
             "EXIT"]
     })
-    //Call fuction based on answer
+        //Call fuction based on answer
         .then(function (response) {
             if (response.choice === "Add Employee") {
                 addEmployee();
@@ -52,11 +52,11 @@ function startApp() {
                 addDep();
             } else if (response.choice === "Remove Department") {
                 removeDep();
-            }else if (response.choice === "EXIT") {
+            } else if (response.choice === "EXIT") {
                 connection.end();
             }
         }
-    )
+        )
 }
 
 //Add employee to database
@@ -78,31 +78,31 @@ function addEmployee() {
             message: "What is the employee's role?"
         }
     ])
-    .then(function(response) {
-        //Add to database
-        connection.query("INSERT INTO employee SET?", {
-            //role_id: ,
-            first_name: response.firstName,
-            last_name: response.lastName,
-            role: response.role            
-        }, function(err) {
-            if (err) throw err;
+        .then(function (response) {
+            //Add to database
+            connection.query("INSERT INTO employee SET ?", {
+                //role_id: ,
+                first_name: response.firstName,
+                last_name: response.lastName,
+                role: response.role
+            }, function (err) {
+                if (err) throw err;
+            })
+            startApp();
         })
-        startApp();
-    })
 };
 
 //Remove employee from database
 
 // //View database
 // viewEmployees() {
-    
+
 // };
 
 //Add role
 function addRole() {
     connection.query("SELECT * FROM department", function (err, result) {
-        if(err) throw err;
+        if (err) throw err;
         inquirer.prompt([
             {
                 name: "roleTitle",
@@ -120,32 +120,48 @@ function addRole() {
                 message: "What department is the employee in?"
             }
         ])
-        .then(function(response) {
-            connection.query("INSERT INTO role SET?", {
-                title: response.title,
-                salary: response.salary,
-                department: response.department
-            }, function(err) {
-                if(err) throw err;
+            .then(function (response) {
+                connection.query("INSERT INTO role SET ?", {
+                    title: response.title,
+                    salary: response.salary,
+                    department: response.department
+                }, function (err) {
+                    if (err) throw err;
+                })
+                startApp();
             })
-            startApp();
-        })
     })
 };
 
 // //Remove role
 // removeRole() {
-    
+
 // };
 // //Update employee roles
 // updateRole() {
-    
-// };
-// //Add department
-// addDep() {
 
 // };
-// //Remove department
+
+//Add department
+function addDep() {
+    inquirer.prompt([
+        {
+            name: "depName",
+            type: "input",
+            message: "What is the department name?"
+        }
+    ])
+        .then(function (response) {
+            connection.query("INSERT INTO department SET ?", {
+                department: response.depName
+            }, function (err) {
+                if (err) throw err;
+            })
+            startApp();
+        })
+}
+
+//Remove department
 // removeDep() {
 
 // };
