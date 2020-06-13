@@ -9,7 +9,7 @@ const connection = mysql.createConnection({
     port: 3306,
     user: "root",
     password: "rootroot",
-    database: "employee_DB"
+    database: "employee_db"
 });
 
 connection.connect(function (err) {
@@ -28,31 +28,25 @@ function startApp() {
             "Remove Employee",
             "View All Employees",
             "Add Role",
-            "Remove Role",
             "Update Employee Role",
             "Add Department",
-            "Remove Department",
             "EXIT"]
     })
         //Call fuction based on answer
         .then(function (response) {
-            if (response.choice === "Add Employee") {
+            if (response.options === "Add Employee") {
                 addEmployee();
-            } else if (response.choice === "Remove Employee") {
+            } else if (response.options === "Remove Employee") {
                 removeEmployee();
-            } else if (response.choice === "View All Employees") {
+            } else if (response.options === "View All Employees") {
                 viewEmployees();
-            } else if (response.choice === "Add Role") {
-                addRole();
-            } else if (response.choice === "Remove Role") {
-                removeRole();
-            } else if (response.choice === "Update Employee Role") {
+            } else if (response.options === "Add Role") {
+                addRole();            
+            } else if (response.options === "Update Employee Role") {
                 updateRole();
-            } else if (response.choice === "Add Department") {
+            } else if (response.options === "Add Department") {
                 addDep();
-            } else if (response.choice === "Remove Department") {
-                removeDep();
-            } else if (response.choice === "EXIT") {
+            } else if (response.options === "EXIT") {
                 connection.end();
             }
         }
@@ -160,8 +154,3 @@ function addDep() {
             startApp();
         })
 }
-
-//Remove department
-// removeDep() {
-
-// };
