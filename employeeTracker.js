@@ -75,7 +75,7 @@ function addEmployee() {
         {
             name: "role",
             type: "input",
-            message: "What is the employee's role?"
+            message: "What is the employee's title?"
         }
     ])
         .then(function (response) {
