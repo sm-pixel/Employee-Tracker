@@ -15,14 +15,14 @@ VALUES ("Sales Director", 120000, 1),
 ("Warehouse Manager", 90000, 5),
 ("S&R Associate", 40000, 5);
 
-INSERT INTO employee (first_name, last_name, role_id, manager_id)
-VALUES ("Michael", "McCormick", 1, null),
-("Taylor", "Anderson", 2, 1),
-("Nicholas", "Smith", 3, 1),
-("Christina", "Williams", 4, null),
-("Ryan", "Johnson", 5, 2),
-("Naomi", "Miller", 6, null),
-("Christopher", "Brown", 7, null),
-("Brittany","Davis", 8, 4),
-("Daryl", "Jones", 9, null),
-("Jason", "Wilson", 10, 5);
+INSERT INTO employee (first_name, last_name, manager_id)
+VALUES ("Michael", "McCormick", null),
+("Taylor", "Anderson", 1),
+("Nicholas", "Smith", 1),
+("Christina", "Williams", null),
+("Ryan", "Johnson", 2),
+("Naomi", "Miller", null),
+("Christopher", "Brown", null),
+("Brittany","Davis", 4),
+("Daryl", "Jones", null),
+("Jason", "Wilson", 5);
