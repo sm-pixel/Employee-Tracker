@@ -55,7 +55,7 @@ function startApp() {
         })
 }
 
-//Add employee to database
+//Add employee
 function addEmployee() {
     let roleList = [];
     connection.query("SELECT * FROM role", function (err, res) {
@@ -77,7 +77,7 @@ function addEmployee() {
         {
             name: "role",
             type: "rawlist",
-            message: "What is the employee's role?",
+            message: "What is the employee's title?",
             choices: roleList
         }
     ])
@@ -92,6 +92,7 @@ function addEmployee() {
             connection.query("INSERT INTO employee SET ?", {
                 first_name: response.firstName,
                 last_name: response.lastName,
+                role_id: newID
             }, function (err) {
                 if (err) throw err;
                 console.log("You have added a new employee")
@@ -105,12 +106,35 @@ function addEmployee() {
 
 //Remove employee
 function removeEmployee() {
+    connection.query("SELECT * FROM employee", function (err, res) {
+        // if (err) throw err;
+        for (let i = 0; i < res.length; i++) {
+            employeeArr.push(`${res[i].id} ${res[i].first_name} ${res[i].last_name}`);
+        }
+        inquirer.prompt([
+            {
+                name: "remEmp",
+                type: "list",
+                message: "Which employee would you like to remove?",
+                choices: employeeArr
+            }
+        ])
+        .then(function (response) {
+           let remEmpId = parseInt(response.remEmp.split(" ")[0]);
+           connection.query("DELETE FROM employee WHERE id=?", remEmpId, 
+           function (err) {
+           if (err) throw err;
 
+           })
+        })
+    })
 }
 
 //View all employees
 function viewEmployees() {
-    connection.query("SELECT * FROM employee",
+    // connection.query("SELECT * FROM employee LEFT JOIN role LEFT JOIN department",
+    connection.query("SELECT employee.id, employee.first_name, employee.last_name, role.title, role.salary, department.dept_name FROM employee LEFT JOIN role ON employee.role_id=role.id LEFT JOIN department ON role.department_id = department.id", 
+
         function (err, res) {
             if (err) throw err;
             console.table(res);
@@ -147,7 +171,7 @@ function addRole() {
         ])
             .then(function (response) {
                 let newID = parseInt(response.department.split(")")[0])
-                   
+
                 connection.query("INSERT INTO role SET ?", {
                     title: response.roleTitle,
                     salary: response.salary,
@@ -162,11 +186,54 @@ function addRole() {
             })
     })
 };
-
-// //Update employee roles
+//Get roles in order to update
+let roleList = [];
+function getRoles() {
+    connection.query("SELECT * FROM role", function (err, res) {
+        if (err) throw err;
+        for (let i = 0; i < res.length; i++) {
+            roleList.push(`${res[i].id} ${res[i].title}`);
+        }
+    })
+}
+//Update employee role
 function updateRole() {
-    
-};
+    //Get roles
+    getRoles()
+    let employeeArr = [];
+    connection.query("SELECT * FROM employee", function (err, res) {
+        for (let i = 0; i < res.length; i++) {
+            employeeArr.push(`${res[i].id} ${res[i].first_name} ${res[i].last_name}`);
+        }
+        inquirer.prompt([
+            {
+                name: "employee",
+                type: "rawlist",
+                message: "Which employee would you like to update their role?",
+                choices: employeeArr
+            },
+            {
+                name: "newRole",
+                type: "rawlist",
+                message: "What is their new role?",
+                choices: roleList
+            }
+        ])
+            .then(function (response) {
+                console.log(`You would like to update ${response.employee}`);
+                connection.query("UPDATE employee SET WHERE ?", [
+                    {
+                        id: response.employee.split(" ")[0]
+                    }
+                ], function (err) {
+                    if (err) throw err;
+                    console.log(`You have updated ${response.employee}.`)
+                    startApp();
+                })
+            })
+    });
+
+}
 
 //Add department
 function addDep() {
