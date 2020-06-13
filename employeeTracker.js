@@ -1,7 +1,7 @@
 //Required
 const mysql = require("mysql");
 const inquirer = require("inquirer");
-//const cTable = require('console.table');
+// const cTable = require("console.table");
 
 //Create mySQL connection
 const connection = mysql.createConnection({
@@ -41,7 +41,7 @@ function startApp() {
             } else if (response.options === "View All Employees") {
                 viewEmployees();
             } else if (response.options === "Add Role") {
-                addRole();            
+                addRole();
             } else if (response.options === "Update Employee Role") {
                 updateRole();
             } else if (response.options === "Add Department") {
@@ -89,9 +89,15 @@ function addEmployee() {
 //Remove employee from database
 
 // //View database
-// viewEmployees() {
-
-// };
+function viewEmployees() {
+    connection.query("SELECT * FROM employee",
+        function (err, res) {
+            if (err) throw err;
+            console.table(res);
+            startApp();
+        }
+    )
+};
 
 //Add role
 function addRole() {
