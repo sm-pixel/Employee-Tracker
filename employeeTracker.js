@@ -125,7 +125,7 @@ function addRole() {
     connection.query("SELECT * FROM department", function (err, res) {
         if (err) throw err;
         for (let i = 0; i < res.length; i++) {
-            departmentRole.push(res[i].dept_name);
+            departmentRole.push(`${res[i].id}) ${res[i].dept_name}`);
         }
         inquirer.prompt([
             {
@@ -140,7 +140,7 @@ function addRole() {
             },
             {
                 name: "department",
-                type: "rawlist",
+                type: "list",
                 message: "What department is this role in?",
                 choices: departmentRole
             }
@@ -164,9 +164,9 @@ function addRole() {
 };
 
 // //Update employee roles
-// updateRole() {
-
-// };
+function updateRole() {
+    
+};
 
 //Add department
 function addDep() {
