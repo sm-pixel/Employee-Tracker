@@ -96,7 +96,7 @@ function addEmployee() {
             }, function (err) {
                 if (err) throw err;
                 console.log("You have added a new employee")
-                // console.table(response)
+                console.table(response)
                 startApp();
             })
 
@@ -108,6 +108,7 @@ function addEmployee() {
 function removeEmployee() {
     connection.query("SELECT * FROM employee", function (err, res) {
         // if (err) throw err;
+        let employeeArr = [];
         for (let i = 0; i < res.length; i++) {
             employeeArr.push(`${res[i].id} ${res[i].first_name} ${res[i].last_name}`);
         }
@@ -119,21 +120,23 @@ function removeEmployee() {
                 choices: employeeArr
             }
         ])
-        .then(function (response) {
-           let remEmpId = parseInt(response.remEmp.split(" ")[0]);
-           connection.query("DELETE FROM employee WHERE id=?", remEmpId, 
-           function (err) {
-           if (err) throw err;
+            .then(function (response) {
+                let remEmpId = parseInt(response.remEmp.split(" ")[0]);
+                connection.query("DELETE FROM employee WHERE id=?", remEmpId,
+                    function (err) {
+                        if (err) throw err;
+                        console.log(`You have removed ${response.remEmp}`)
+                        startApp();
 
-           })
-        })
+                    })
+            })
     })
 }
 
 //View all employees
 function viewEmployees() {
     // connection.query("SELECT * FROM employee LEFT JOIN role LEFT JOIN department",
-    connection.query("SELECT employee.id, employee.first_name, employee.last_name, role.title, role.salary, department.dept_name FROM employee LEFT JOIN role ON employee.role_id=role.id LEFT JOIN department ON role.department_id = department.id", 
+    connection.query("SELECT employee.id, employee.first_name, employee.last_name, role.title, role.salary, department.dept_name FROM employee LEFT JOIN role ON employee.role_id=role.id LEFT JOIN department ON role.department_id = department.id",
 
         function (err, res) {
             if (err) throw err;
@@ -221,7 +224,7 @@ function updateRole() {
         ])
             .then(function (response) {
                 console.log(`You would like to update ${response.employee}`);
-                connection.query("UPDATE employee SET WHERE ?", [
+                connection.query("UPDATE employee SET role_id = ? WHERE id = ?", [
                     {
                         id: response.employee.split(" ")[0]
                     }
