@@ -14,6 +14,7 @@ const connection = mysql.createConnection({
 
 connection.connect(function (err) {
     if (err) throw err;
+    console.log("Welcome to your Employee Tracker")
     startApp();
 })
 
@@ -58,10 +59,11 @@ function startApp() {
 //Add employee
 function addEmployee() {
     let roleList = [];
-    connection.query("SELECT * FROM role", function (err, res) {
+    connection.query("SELECT id, title FROM role", function (err, res) {
         if (err) throw err;
         for (let i = 0; i < res.length; i++)
-            roleList.push(res[i].title)
+            roleList.push(`${res[i].id}) ${res[i].title}`)
+            // roleList.push(res[i].title);
     })
     inquirer.prompt([
         {
@@ -82,12 +84,8 @@ function addEmployee() {
         }
     ])
         .then(function (response) {
-            let newID;
-            for (let a = 0; a < response.length; a++) {
-                if (res[a].title == response.role) {
-                    newID = res[a].id;
-                }
-            }
+            let newID = parseInt(response.role.split(" ")[0])
+            
             //Add to database
             connection.query("INSERT INTO employee SET ?", {
                 first_name: response.firstName,
@@ -95,7 +93,7 @@ function addEmployee() {
                 role_id: newID
             }, function (err) {
                 if (err) throw err;
-                console.log("You have added a new employee")
+                console.log(`You have added a new employee`)
                 console.table(response)
                 startApp();
             })
@@ -225,6 +223,9 @@ function updateRole() {
             .then(function (response) {
                 console.log(`You would like to update ${response.employee}`);
                 connection.query("UPDATE employee SET role_id = ? WHERE id = ?", [
+                    {
+                        role_id: response.newRole.split(" ")[0]
+                    },
                     {
                         id: response.employee.split(" ")[0]
                     }
