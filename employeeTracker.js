@@ -94,7 +94,7 @@ function addEmployee() {
             }, function (err) {
                 if (err) throw err;
                 console.log(`You have added a new employee`)
-                console.table(response)
+                // console.table(response)
                 startApp();
             })
 
