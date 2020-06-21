@@ -4,7 +4,7 @@
 This is a CLI app that allows you to manage employees, roles, and departments of your company.
 
 ## Demo
-![Employee Tracker Demo](.gif)
+![Employee Tracker Demo](assets/empTrackerDemo.gif)
 
 
 ## User Story
